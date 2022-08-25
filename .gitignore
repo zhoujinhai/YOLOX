@@ -1,6 +1,12 @@
 ### Linux ###
 *~
 
+# weights
+weights/
+
+# assets
+assets/*
+
 # user experiments directory
 YOLOX_outputs/
 datasets/

@@ -2,12 +2,19 @@
 # -*- coding:utf-8 -*-
 # Copyright (c) Megvii, Inc. and its affiliates.
 
+"""
+Usage:
+python demo.py image -f ../exps/Tooth.py -n Tooth -c ../weights/Tooth_s.pth --path ../assets/tooth2.png --conf 0.25 --nms 0.45 --tsize 640 --save_result --device cpu
+
+"""
+
 import argparse
 import os
 import time
 from loguru import logger
 
 import cv2
+import glob
 
 import torch
 
@@ -22,7 +29,7 @@ IMAGE_EXT = [".jpg", ".jpeg", ".webp", ".bmp", ".png"]
 def make_parser():
     parser = argparse.ArgumentParser("YOLOX Demo!")
     parser.add_argument(
-        "demo", default="image", help="demo type, eg. image, video and webcam"
+        "demo", default="image", help="demo type, eg. image, images, video and webcam"
     )
     parser.add_argument("-expn", "--experiment-name", type=str, default=None)
     parser.add_argument("-n", "--name", type=str, default=None, help="model name")
@@ -309,6 +316,15 @@ def main(exp, args):
     current_time = time.localtime()
     if args.demo == "image":
         image_demo(predictor, vis_folder, args.path, current_time, args.save_result)
+    elif args.demo == "images":
+        assert os.path.isdir(args.path)
+        img_pngs = glob.glob(os.path.join(args.path, "*.png"))
+        for img_path in img_pngs:
+            image_demo(predictor, vis_folder, img_path, current_time, args.save_result)
+        img_jpgs = glob.glob(os.path.join(args.path, "*.jpg"))
+        for img_path in img_jpgs:
+            image_demo(predictor, vis_folder, img_path, current_time, args.save_result)
+
     elif args.demo == "video" or args.demo == "webcam":
         imageflow_demo(predictor, vis_folder, current_time, args)
 
