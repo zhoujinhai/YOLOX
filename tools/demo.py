@@ -109,7 +109,7 @@ class Predictor(object):
         self,
         model,
         exp,
-        cls_names=COCO_CLASSES,
+        cls_names=None,
         trt_file=None,
         decoder=None,
         device="cpu",
@@ -117,7 +117,7 @@ class Predictor(object):
         legacy=False,
     ):
         self.model = model
-        self.cls_names = cls_names
+        self.cls_names = exp.cls_names if exp.cls_names is not None else COCO_CLASSES
         self.decoder = decoder
         self.num_classes = exp.num_classes
         self.confthre = exp.test_conf
@@ -310,7 +310,7 @@ def main(exp, args):
         decoder = None
 
     predictor = Predictor(
-        model, exp, COCO_CLASSES, trt_file, decoder,
+        model, exp, None, trt_file, decoder,
         args.device, args.fp16, args.legacy,
     )
     current_time = time.localtime()

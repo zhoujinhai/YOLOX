@@ -48,6 +48,11 @@ class Exp(MyExp):
         self.data_num_workers = 4
         self.eval_interval = 1
 
+        self.cls_names = (
+            "background",
+            "tooth",
+        )
+
 ```
 
 #### 4.训练
